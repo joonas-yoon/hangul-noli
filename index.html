@@ -167,7 +167,16 @@
 
         function fetchQuiz() {
           answer = randomText();
-          quizBox.text(Hangul.shift(answer));
+          text = answer.split('').map((s) => {
+            if (Math.random() < 0.3) {
+              s = Hangul.shift(s);
+            }
+            if (Math.random() < 0.1) {
+              s = Hangul.obfuscate(s);
+            }
+            return s;
+          }).join('');
+          quizBox.text(text);
           return answer;
         }
 
