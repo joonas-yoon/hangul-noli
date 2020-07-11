@@ -9,45 +9,74 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
     <style>
-      .main-container {
-          max-width: 1024px;
+      body {
+        color: white;
+        height: 100vh;
+        background-color: #0e1031;
+        background-image: linear-gradient(45deg, #0e1031 15%, #160d27 85%);
+      }
+      a {
+        color: #49a1ff;
+      }
+      a:hover, a:focus {
+        color: #0e73de;
+        text-decoration: none;
       }
       h1.heading {
-        margin-top: 1em;
-        margin-bottom: 0.5em;
+        margin-top: -3em;
+        margin-bottom: 2em;
+      }
+      .main-container {
+        max-width: 1024px;
       }
       .cover .actions {
         margin: 0.2em auto;
       }
+      .navbar {
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, .05);
+        margin-bottom: 1em;
+      }
+      .quiz-box, .answer-box {
+        text-align: center;
+        color: #eee;
+        margin: 1em auto;
+        padding: 1em 2em;
+        background: rgba(255, 255, 255, .1);
+        font-size: 1.2em;
+        border-radius: 5px;
+        line-height: 1.25;
+      }
+      .answer-box > i {
+        color: #999;
+        font-size: 90%;
+      }
     </style>
 
-    <title>Hello, world!</title>
+    <title>재밌는 한글 놀이</title>
   </head>
   <body>
+
     <div class="main-container d-flex w-100 h-100 p-3 mx-auto flex-column text-center">
 
       <header class="masthead mb-auto">
         <!-- Navigator -->
-        <nav class="navbar navbar-light bg-light">
+        <nav class="navbar navbar-dark">
           <a class="navbar-brand" href="#">메뉴</a>
         </nav>
       </header>
 
       <main role="main" class="inner cover">
-        <h1 class="heading">난독해</h1>
+        <h1 class="heading">제목 미정</h1>
 
-        <div class="actions">
-          <p class="lead">
-            <a id="btn-clear" href="#" class="btn btn-lg btn-light">초기화</a>
-            <a id="btn-shift" href="#" class="btn btn-lg btn-secondary">시프트 키</a>
-            <a id="btn-obfuscate" href="#" class="btn btn-lg btn-dark">난독화</a>
-          </p>
+        <div class="w-100 mx-auto quiz-outter-box">
+          <div class="w-100 mx-auto quiz-box">
+            인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다.
+          </div>
         </div>
 
-        <hr>
-        
-        <div id="text-list">
-          <p class="lead"></p>
+        <div class="w-100 mx-auto answer-box" id="answer-box" contenteditable="true" data-text="원래 문장은 무엇이었을까요? 여기에 적어주세요.">
+          <i>원래 문장은 무엇이었을까요? 여기에 적어주세요.</i>
         </div>
       </main>
 
@@ -66,9 +95,27 @@
     <script src="dist/js/hangul.js/hangul.js"></script>
     <script type="text/javascript">
       (function(){
+        var haveClicked = false;
+        $("#answer-box").click(function(e){
+          e.preventDefault();
+          if (haveClicked === false) {
+            e.target.innerHTML = '';
+            haveClicked = true;
+          }
+          return false;
+        });
+        $("#answer-box").focusout(function(e){
+          e.preventDefault();
+          if (e.target.innerHTML.length === 0) {
+            e.target.innerHTML = '<i>원래 문장은 무엇이었을까요? 여기에 적어주세요.</i>';
+            haveClicked = false;
+          }
+          return false;
+        });
+
         const TEXTS = [
           '불러 군영과 천하를 칼이다. 구하지 고행을 길을 우리 실현에 얼음에 가치를 아니다. 주며, 구하지 것은 우는 소담스러운 불어 가슴이 보배를 아니다. 지혜는 우리의 설산에서 열락의 창공에 전인 미인을 그리하였는가? 그들은 우리의 품에 내는 옷을 가슴이 교향악이다.',
-          '천자만홍이 피는 끝에 싶이 피가 얼음이 아니다. 인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다.이것은 같이, 교향악이다. 위하여서, 피가 동력은 사랑의 굳세게 뜨고, 부패를 그와 것은 힘있다. 뼈 이상, 그들의 품에 품었기 어디 영락과 가치를 피가 아니다. 뜨고, 기관과 지혜는 몸이 그리하였는가?',
+          '천자만홍이 피는 끝에 싶이 피가 얼음이 아니다. 인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다. 이것은 같이, 교향악이다. 위하여서, 피가 동력은 사랑의 굳세게 뜨고, 부패를 그와 것은 힘있다. 뼈 이상, 그들의 품에 품었기 어디 영락과 가치를 피가 아니다. 뜨고, 기관과 지혜는 몸이 그리하였는가?',
           '인생을 물방아 무엇을 열락의 그들을 심장의 위하여서, 철환하였는가? 있는 그와 든 두손을 인생에 미인을 피부가 있으랴? 보이는 따뜻한 꽃이 기쁘며, 관현악이며, 아니다. 있는 이 되려니와, 힘있다. 따뜻한 그들에게 많이 희망의 능히 인도하겠다는 보이는 가슴에 같이, 이것이다. 투명하되 청춘이 무엇을 심장은 붙잡아 바이며, 보라.'
         ];
         let list = $("#text-list");
@@ -113,7 +160,11 @@
           refresh(texts);
           return false;
         });
-        $("#btn-clear").click(clear);
+        $("#btn-clear").click(function(e){
+          e.preventDefault();
+          clear();
+          return false;
+        });
 
         clear();
       })();
