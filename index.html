@@ -47,6 +47,13 @@
         border-radius: 5px;
         line-height: 1.25;
       }
+      .answer-box {
+        border: 1px solid rgba(255, 255, 255, .3);
+        transition: border ease-in-out 0.25s;
+      }
+      .answer-box:hover, .answer-box:focus, .answer-box:active {
+        border-color: #fff;
+      }
       .answer-box > i {
         color: #999;
         font-size: 90%;
@@ -70,7 +77,7 @@
         <h1 class="heading">제목 미정</h1>
 
         <div class="w-100 mx-auto quiz-outter-box">
-          <div class="w-100 mx-auto quiz-box">
+          <div class="w-100 mx-auto quiz-box" id="quiz-box">
             인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다.
           </div>
         </div>
@@ -94,8 +101,62 @@
     <script src="dist/js/hangul.js/hangul.js"></script>
     <script type="text/javascript">
       (function(){
+        const TEXTS = [
+          '가는 날이 장날이다',
+          '가는 말이 고와야 오는 말이 곱다',
+          '가랑비에 옷 젖는 줄 모른다',
+          '가랑잎이 솔잎더러 바스락거린다고 한다',
+          '가재는 게 편이라',
+          '가지 많은 나무에 바람 잘 날 없다',
+          '간에 가 붙고 쓸개에 가 붙는다',
+          '간에 기별도 안 간다',
+          '간이 콩알만해지다',
+          '갈수록 태산',
+          '값싼 것이 비지떡',
+          '같은  값이면 다홍치마',
+          '개구리 올챙이 적 생각을 못한다',
+          '개밥에 도토리',
+          '개천에서 용 난다',
+          '고기는 씹어야 맛이요, 말은 해야 맛',
+          '고래 싸움에 새우 등 터진다',
+          '고양이 목에 방울 달기',
+          '공든 탑이 무너지랴',
+          '구더기 무서워 장 못 담글까',
+          '구슬이 서 말이라도 꿰어야 보배',
+          '귀에 걸면 귀걸이, 코에 걸면 코걸이',
+          '그림의 떡',
+          '금강산도 식후경 뜻',
+          '뛰는 놈 위에 나는 놈 있다',
+          '까마귀 날자 배 떨어진다.',
+          '꿩 대신 닭',
+          '꿩 먹고 알 먹기',
+          '남의 잔치에 감 놓아라 배 놓아라 한다',
+          '낫 놓고 기역자도 모른다',
+          '낮말은 새가 듣고 밤말은 쥐가 듣는다',
+          '내 코가 석 자',
+          '누워서 침 뱉기',
+          '늦게 배운 도둑이 날 새는 줄 모른다',
+          '다 된 죽에 코 풀기',
+          '달면 삼키고 쓰면 뱉는다',
+          '닭 잡아 먹고 오리발 내민다',
+          '도둑이 제 발 저리다',
+          '돌다리도 두들겨 보고 건너라',
+          '되로 주고 말로 받는다',
+          '등잔 밑이 어둡다',
+          '땅 짚고 헤엄치기 ',
+          '똥 묻은 개가 겨 묻은 개 나무란다',
+          '마른 하늘에 날벼락',
+          '말 한마디에 천 냥 빚도 갚는다',
+          '목구멍이 포도청',
+          '못된 송아지 엉덩이에 뿔 난다',
+          '믿는 도끼에 발등 찍힌다',
+          '밑 빠진 독에 물 붓기',
+          '바늘 도둑이 소 도둑 된다',
+        ];
+
         let haveClicked = false;
         let answerBox = $("#answer-box");
+        let quizBox = $("#quiz-box");
         let placeholderHtml = '<i>' + answerBox.data('text') + '</i>';
         answerBox.html(placeholderHtml);
         answerBox.click(function(e){
@@ -115,61 +176,23 @@
           }
           return false;
         });
-
-        const TEXTS = [
-          '불러 군영과 천하를 칼이다. 구하지 고행을 길을 우리 실현에 얼음에 가치를 아니다. 주며, 구하지 것은 우는 소담스러운 불어 가슴이 보배를 아니다. 지혜는 우리의 설산에서 열락의 창공에 전인 미인을 그리하였는가? 그들은 우리의 품에 내는 옷을 가슴이 교향악이다.',
-          '천자만홍이 피는 끝에 싶이 피가 얼음이 아니다. 인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다. 이것은 같이, 교향악이다. 위하여서, 피가 동력은 사랑의 굳세게 뜨고, 부패를 그와 것은 힘있다. 뼈 이상, 그들의 품에 품었기 어디 영락과 가치를 피가 아니다. 뜨고, 기관과 지혜는 몸이 그리하였는가?',
-          '인생을 물방아 무엇을 열락의 그들을 심장의 위하여서, 철환하였는가? 있는 그와 든 두손을 인생에 미인을 피부가 있으랴? 보이는 따뜻한 꽃이 기쁘며, 관현악이며, 아니다. 있는 이 되려니와, 힘있다. 따뜻한 그들에게 많이 희망의 능히 인도하겠다는 보이는 가슴에 같이, 이것이다. 투명하되 청춘이 무엇을 심장은 붙잡아 바이며, 보라.'
-        ];
-        let list = $("#text-list");
-
-        function clear() {
-          refresh(TEXTS);
-        }
-
-        function refresh(texts) {
-          list.html('');
-          for (var i = 0; i < texts.length; i++) {
-            let p = $('<p></p>');
-            p.addClass('lead');
-            p.text(texts[i]);
-            list.append(p);
+        answerBox.keyup(function(e){
+          if (e.keyCode == 13) { // Enter key
+            fetchQuiz();
+            this.innerHTML = '';
           }
+        });
+
+        function randomText() {
+          return TEXTS[Math.floor(Math.random() * TEXTS.length)];
         }
 
-        function randomly(f, val) {
-          if (Math.random() < 0.4) {
-            return f(val);
-          } else {
-            return val;
-          }
+        function fetchQuiz() {
+          let text = randomText();
+          quizBox.text(Hangul.shift(text));
         }
-
-        $("#btn-obfuscate").click(function(e){
-          e.preventDefault();
-          let texts = JSON.parse(JSON.stringify(TEXTS));
-          for (var i = 0; i < texts.length; i++) {
-            texts[i] = texts[i].split('').map((str) => {return randomly(Hangul.obfuscate, str)}).join('');
-          };
-          refresh(texts);
-          return false;
-        });
-        $("#btn-shift").click(function(e){
-          e.preventDefault();
-          let texts = JSON.parse(JSON.stringify(TEXTS));
-          for (var i = 0; i < texts.length; i++) {
-            texts[i] = Hangul.shift(texts[i]);
-          };
-          refresh(texts);
-          return false;
-        });
-        $("#btn-clear").click(function(e){
-          e.preventDefault();
-          clear();
-          return false;
-        });
-
-        clear();
+        
+        fetchQuiz();
       })();
     </script>
   </body>
