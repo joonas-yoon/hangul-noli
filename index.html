@@ -129,22 +129,37 @@
           if (e.keyCode == 13) { // Enter key
             this.innerText = this.innerText.replace(/(\r\n|\n|\r)/gm, '');
             var $self = $(this);
-            clearTimeout(answerValidatorTimer);
             if (validateAnswer(this.innerText)) {
               this.innerHTML = '';
               fetchQuiz();
               $self.addClass('success');
+              clearTimeout(answerValidatorTimer);
               answerValidatorTimer = setTimeout(function(){
                 $self.removeClass('success');
-              }, 1000);
+              }, 2000);
             } else {
               $self.addClass('error');
+              clearTimeout(answerValidatorTimer);
               answerValidatorTimer = setTimeout(function(){
                 $self.removeClass('error');
               }, 2000);
+
+              var range = document.createRange();
+              var sel = window.getSelection();
+              var t = this.childNodes[0] || '';
+              if (t.length > 0) {
+                range.setStart(t, t.length);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+              }
             }
           }
         });
+
+        setInterval(function(){
+          answerBox.removeClass('error');
+        }, 5000);
 
         function randomText() {
           return TEXTS[Math.floor(Math.random() * TEXTS.length)];
