@@ -51,3 +51,7 @@ h1.heading {
     border-color: #f32e10 !important;
     background-color: rgba(255, 132, 113, 0.4) !important;
 }
+.answer-box.success {
+    border-color: #57ff84 !important;
+    background-color: rgba(159, 232, 149, 0.4) !important;
+}

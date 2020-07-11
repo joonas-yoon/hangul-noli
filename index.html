@@ -72,7 +72,7 @@
           '구슬이 서 말이라도 꿰어야 보배',
           '귀에 걸면 귀걸이, 코에 걸면 코걸이',
           '그림의 떡',
-          '금강산도 식후경 뜻',
+          '금강산도 식후경',
           '뛰는 놈 위에 나는 놈 있다',
           '까마귀 날자 배 떨어진다.',
           '꿩 대신 닭',
@@ -127,18 +127,22 @@
         });
         answerBox.keyup(function(e){
           if (e.keyCode == 13) { // Enter key
+            this.innerText = this.innerText.replace(/(\r\n|\n|\r)/gm, '');
+            var $self = $(this);
+            clearTimeout(answerValidatorTimer);
             if (validateAnswer(this.innerText)) {
               this.innerHTML = '';
               fetchQuiz();
+              $self.addClass('success');
+              answerValidatorTimer = setTimeout(function(){
+                $self.removeClass('success');
+              }, 1000);
             } else {
-              var $self = $(this);
               $self.addClass('error');
-              clearTimeout(answerValidatorTimer);
               answerValidatorTimer = setTimeout(function(){
                 $self.removeClass('error');
               }, 2000);
             }
-            this.innerText = this.innerText.replace(/(\r\n|\n|\r)/gm, '');
           }
         });
 
@@ -153,7 +157,7 @@
         }
 
         function validateAnswer(text) {
-          return answer == text;
+          return answer.replace(/\s/g, '') == text.replace(/\s/g, '');
         }
         
         fetchQuiz();
