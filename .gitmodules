@@ -1,0 +1,4 @@
+[submodule "dist/js/hangul.js"]
+	path = dist/js/hangul.js
+	url = https://github.com/joonas-yoon/Hangul.js/
+	branch = release
