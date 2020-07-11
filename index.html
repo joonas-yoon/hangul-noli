@@ -76,7 +76,6 @@
         </div>
 
         <div class="w-100 mx-auto answer-box" id="answer-box" contenteditable="true" data-text="원래 문장은 무엇이었을까요? 여기에 적어주세요.">
-          <i>원래 문장은 무엇이었을까요? 여기에 적어주세요.</i>
         </div>
       </main>
 
@@ -95,19 +94,23 @@
     <script src="dist/js/hangul.js/hangul.js"></script>
     <script type="text/javascript">
       (function(){
-        var haveClicked = false;
-        $("#answer-box").click(function(e){
+        let haveClicked = false;
+        let answerBox = $("#answer-box");
+        let placeholderHtml = '<i>' + answerBox.data('text') + '</i>';
+        answerBox.html(placeholderHtml);
+        answerBox.click(function(e){
           e.preventDefault();
           if (haveClicked === false) {
-            e.target.innerHTML = '';
+            this.innerHTML = '';
             haveClicked = true;
           }
           return false;
         });
-        $("#answer-box").focusout(function(e){
+        answerBox.focusout(function(e){
           e.preventDefault();
-          if (e.target.innerHTML.length === 0) {
-            e.target.innerHTML = '<i>원래 문장은 무엇이었을까요? 여기에 적어주세요.</i>';
+          let text = this.innerHTML || '';
+          if (text.length === 0) {
+            this.innerHTML = placeholderHtml;
             haveClicked = false;
           }
           return false;
