@@ -1,0 +1,53 @@
+body {
+    color: white;
+    height: 100vh;
+    background-color: #0e1031;
+    background-image: linear-gradient(45deg, #0e1031 15%, #160d27 85%);
+}
+a {
+    color: #49a1ff;
+}
+a:hover, a:focus {
+    color: #0e73de;
+    text-decoration: none;
+}
+h1.heading {
+    margin-top: -3em;
+    margin-bottom: 2em;
+}
+.main-container {
+    max-width: 1024px;
+}
+.cover .actions {
+    margin: 0.2em auto;
+}
+.navbar {
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, .05);
+    margin-bottom: 1em;
+}
+.quiz-box, .answer-box {
+    text-align: center;
+    color: #eee;
+    margin: 1em auto;
+    padding: 1em 2em;
+    background: rgba(255, 255, 255, .1);
+    font-size: 1.2em;
+    border-radius: 5px;
+    line-height: 1.25;
+}
+.answer-box {
+    border: 1px solid rgba(255, 255, 255, .3);
+    transition: border-color ease-in-out 0.25s, background-color ease-in-out 0.25s;
+}
+.answer-box:hover, .answer-box:focus, .answer-box:active {
+    border-color: #fff;
+}
+.answer-box > i {
+    color: #999;
+    font-size: 90%;
+}
+.answer-box.error {
+    border-color: #f32e10 !important;
+    background-color: rgba(255, 132, 113, 0.4) !important;
+}

@@ -7,58 +7,7 @@
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-
-    <style>
-      body {
-        color: white;
-        height: 100vh;
-        background-color: #0e1031;
-        background-image: linear-gradient(45deg, #0e1031 15%, #160d27 85%);
-      }
-      a {
-        color: #49a1ff;
-      }
-      a:hover, a:focus {
-        color: #0e73de;
-        text-decoration: none;
-      }
-      h1.heading {
-        margin-top: -3em;
-        margin-bottom: 2em;
-      }
-      .main-container {
-        max-width: 1024px;
-      }
-      .cover .actions {
-        margin: 0.2em auto;
-      }
-      .navbar {
-        border-radius: 5px;
-        background-color: rgba(255, 255, 255, .05);
-        margin-bottom: 1em;
-      }
-      .quiz-box, .answer-box {
-        text-align: center;
-        color: #eee;
-        margin: 1em auto;
-        padding: 1em 2em;
-        background: rgba(255, 255, 255, .1);
-        font-size: 1.2em;
-        border-radius: 5px;
-        line-height: 1.25;
-      }
-      .answer-box {
-        border: 1px solid rgba(255, 255, 255, .3);
-        transition: border ease-in-out 0.25s;
-      }
-      .answer-box:hover, .answer-box:focus, .answer-box:active {
-        border-color: #fff;
-      }
-      .answer-box > i {
-        color: #999;
-        font-size: 90%;
-      }
-    </style>
+    <link rel="stylesheet" href="dist/css/site.css">
 
     <title>재밌는 한글 놀이</title>
   </head>
@@ -77,9 +26,7 @@
         <h1 class="heading">제목 미정</h1>
 
         <div class="w-100 mx-auto quiz-outter-box">
-          <div class="w-100 mx-auto quiz-box" id="quiz-box">
-            인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다.
-          </div>
+          <div class="w-100 mx-auto quiz-box" id="quiz-box">문제 불러오는 중...</div>
         </div>
 
         <div class="w-100 mx-auto answer-box" id="answer-box" contenteditable="true" data-text="원래 문장은 무엇이었을까요? 여기에 적어주세요.">
@@ -158,6 +105,8 @@
         let answerBox = $("#answer-box");
         let quizBox = $("#quiz-box");
         let placeholderHtml = '<i>' + answerBox.data('text') + '</i>';
+        let answer = '';
+        let answerValidatorTimer;
         answerBox.html(placeholderHtml);
         answerBox.click(function(e){
           e.preventDefault();
@@ -178,8 +127,18 @@
         });
         answerBox.keyup(function(e){
           if (e.keyCode == 13) { // Enter key
-            fetchQuiz();
-            this.innerHTML = '';
+            if (validateAnswer(this.innerText)) {
+              this.innerHTML = '';
+              fetchQuiz();
+            } else {
+              var $self = $(this);
+              $self.addClass('error');
+              clearTimeout(answerValidatorTimer);
+              answerValidatorTimer = setTimeout(function(){
+                $self.removeClass('error');
+              }, 2000);
+            }
+            this.innerText = this.innerText.replace(/(\r\n|\n|\r)/gm, '');
           }
         });
 
@@ -188,8 +147,13 @@
         }
 
         function fetchQuiz() {
-          let text = randomText();
-          quizBox.text(Hangul.shift(text));
+          answer = randomText();
+          quizBox.text(Hangul.shift(answer));
+          return answer;
+        }
+
+        function validateAnswer(text) {
+          return answer == text;
         }
         
         fetchQuiz();
