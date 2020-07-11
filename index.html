@@ -13,7 +13,11 @@
           max-width: 1024px;
       }
       h1.heading {
-        margin: 1em auto;
+        margin-top: 1em;
+        margin-bottom: 0.5em;
+      }
+      .cover .actions {
+        margin: 0.2em auto;
       }
     </style>
 
@@ -25,24 +29,31 @@
       <header class="masthead mb-auto">
         <!-- Navigator -->
         <nav class="navbar navbar-light bg-light">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand" href="#">메뉴</a>
         </nav>
       </header>
 
       <main role="main" class="inner cover">
-        <h1 class="heading">Untitled</h1>
-        <p class="lead">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-        <p class="lead">It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,</p>
-        <p class="lead">and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-        <p class="lead">
-          <a href="#" class="btn btn-lg btn-secondary">Learn more</a>
-        </p>
-        <br>
+        <h1 class="heading">난독해</h1>
+
+        <div class="actions">
+          <p class="lead">
+            <a id="btn-clear" href="#" class="btn btn-lg btn-light">초기화</a>
+            <a id="btn-shift" href="#" class="btn btn-lg btn-secondary">시프트 키</a>
+            <a id="btn-obfuscate" href="#" class="btn btn-lg btn-dark">난독화</a>
+          </p>
+        </div>
+
+        <hr>
+        
+        <div id="text-list">
+          <p class="lead"></p>
+        </div>
       </main>
 
       <footer class="mastfoot mt-auto">
         <div class="inner">
-        <p>provided by <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>.</p>
+        <p>Powered by <a href="https://www.github.com/joonas-yoon" target="_blank">@joonas-yoon</a>, Template by <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>. </p>
         </div>
       </footer>
     </div>
@@ -52,5 +63,60 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <script src="dist/js/hangul.js/hangul.js"></script>
+    <script type="text/javascript">
+      (function(){
+        const TEXTS = [
+          '불러 군영과 천하를 칼이다. 구하지 고행을 길을 우리 실현에 얼음에 가치를 아니다. 주며, 구하지 것은 우는 소담스러운 불어 가슴이 보배를 아니다. 지혜는 우리의 설산에서 열락의 창공에 전인 미인을 그리하였는가? 그들은 우리의 품에 내는 옷을 가슴이 교향악이다.',
+          '천자만홍이 피는 끝에 싶이 피가 얼음이 아니다. 인류의 굳세게 열매를 찾아다녀도, 새 것이다. 꾸며 대중을 소리다.이것은 같이, 교향악이다. 위하여서, 피가 동력은 사랑의 굳세게 뜨고, 부패를 그와 것은 힘있다. 뼈 이상, 그들의 품에 품었기 어디 영락과 가치를 피가 아니다. 뜨고, 기관과 지혜는 몸이 그리하였는가?',
+          '인생을 물방아 무엇을 열락의 그들을 심장의 위하여서, 철환하였는가? 있는 그와 든 두손을 인생에 미인을 피부가 있으랴? 보이는 따뜻한 꽃이 기쁘며, 관현악이며, 아니다. 있는 이 되려니와, 힘있다. 따뜻한 그들에게 많이 희망의 능히 인도하겠다는 보이는 가슴에 같이, 이것이다. 투명하되 청춘이 무엇을 심장은 붙잡아 바이며, 보라.'
+        ];
+        let list = $("#text-list");
+
+        function clear() {
+          refresh(TEXTS);
+        }
+
+        function refresh(texts) {
+          list.html('');
+          for (var i = 0; i < texts.length; i++) {
+            let p = $('<p></p>');
+            p.addClass('lead');
+            p.text(texts[i]);
+            list.append(p);
+          }
+        }
+
+        function randomly(f, val) {
+          if (Math.random() < 0.4) {
+            return f(val);
+          } else {
+            return val;
+          }
+        }
+
+        $("#btn-obfuscate").click(function(e){
+          e.preventDefault();
+          let texts = JSON.parse(JSON.stringify(TEXTS));
+          for (var i = 0; i < texts.length; i++) {
+            texts[i] = texts[i].split('').map((str) => {return randomly(Hangul.obfuscate, str)}).join('');
+          };
+          refresh(texts);
+          return false;
+        });
+        $("#btn-shift").click(function(e){
+          e.preventDefault();
+          let texts = JSON.parse(JSON.stringify(TEXTS));
+          for (var i = 0; i < texts.length; i++) {
+            texts[i] = Hangul.shift(texts[i]);
+          };
+          refresh(texts);
+          return false;
+        });
+        $("#btn-clear").click(clear);
+
+        clear();
+      })();
+    </script>
   </body>
 </html>
