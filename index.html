@@ -26,6 +26,9 @@
         <h1 class="heading">제목 미정</h1>
 
         <div class="w-100 mx-auto quiz-outter-box">
+          <div class="progress bg-dark" style="height: 2px; margin-left: 2px; margin-right: 2px;">
+            <div id="progressbar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
           <div class="w-100 mx-auto quiz-box" id="quiz-box">문제 불러오는 중...</div>
         </div>
 
@@ -53,7 +56,7 @@
           '가는 말이 고와야 오는 말이 곱다',
           '가랑비에 옷 젖는 줄 모른다',
           '가랑잎이 솔잎더러 바스락거린다고 한다',
-          '가재는 게 편이라',
+          '가재는 게 편',
           '가지 많은 나무에 바람 잘 날 없다',
           '간에 가 붙고 쓸개에 가 붙는다',
           '간에 기별도 안 간다',
@@ -74,7 +77,7 @@
           '그림의 떡',
           '금강산도 식후경',
           '뛰는 놈 위에 나는 놈 있다',
-          '까마귀 날자 배 떨어진다.',
+          '까마귀 날자 배 떨어진다',
           '꿩 대신 닭',
           '꿩 먹고 알 먹기',
           '남의 잔치에 감 놓아라 배 놓아라 한다',
@@ -90,7 +93,7 @@
           '돌다리도 두들겨 보고 건너라',
           '되로 주고 말로 받는다',
           '등잔 밑이 어둡다',
-          '땅 짚고 헤엄치기 ',
+          '땅 짚고 헤엄치기',
           '똥 묻은 개가 겨 묻은 개 나무란다',
           '마른 하늘에 날벼락',
           '말 한마디에 천 냥 빚도 갚는다',
@@ -98,12 +101,14 @@
           '못된 송아지 엉덩이에 뿔 난다',
           '믿는 도끼에 발등 찍힌다',
           '밑 빠진 독에 물 붓기',
-          '바늘 도둑이 소 도둑 된다',
+          '바늘 도둑이 소 도둑 된다'
         ];
 
         let haveClicked = false;
         let answerBox = $("#answer-box");
         let quizBox = $("#quiz-box");
+        let progressBar = $("#progressbar");
+        let progressScore = 0;
         let placeholderHtml = '<i>' + answerBox.data('text') + '</i>';
         let answer = '';
         let answerValidatorTimer;
@@ -129,19 +134,24 @@
           if (e.keyCode == 13) { // Enter key
             this.innerText = this.innerText.replace(/(\r\n|\n|\r)/gm, '');
             var $self = $(this);
-            if (validateAnswer(this.innerText)) {
+            if (validateAnswer(this.innerText)) { // Success
               this.innerHTML = '';
               fetchQuiz();
               $self.addClass('success');
+              progressBar.addClass('bg-success');
               clearTimeout(answerValidatorTimer);
               answerValidatorTimer = setTimeout(function(){
                 $self.removeClass('success');
+                progressBar.removeClass('bg-success');
               }, 2000);
-            } else {
+              progressScore += 10;
+            } else {                              // Fail
               $self.addClass('error');
+              progressBar.addClass('bg-danger');
               clearTimeout(answerValidatorTimer);
               answerValidatorTimer = setTimeout(function(){
                 $self.removeClass('error');
+                progressBar.removeClass('bg-danger');
               }, 2000);
 
               var range = document.createRange();
@@ -153,7 +163,9 @@
                 sel.removeAllRanges();
                 sel.addRange(range);
               }
+              progressScore -= 5;
             }
+            progressBar.css('width', progressScore + '%');
           }
         });
 

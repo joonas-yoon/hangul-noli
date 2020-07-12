@@ -36,6 +36,9 @@ h1.heading {
     border-radius: 5px;
     line-height: 1.25;
 }
+.quiz-box {
+    margin-top: 0.5em;
+}
 .answer-box {
     border: 1px solid rgba(255, 255, 255, .3);
     transition: border-color ease-in-out 0.25s, background-color ease-in-out 0.25s;
