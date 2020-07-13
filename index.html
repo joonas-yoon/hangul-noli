@@ -110,10 +110,12 @@
                 fetchQuiz();
                 $self.addClass('success');
                 $progressBar.addClass('bg-success');
+                $(document.body).addClass('success');
                 clearTimeout(answerValidatorTimer);
                 answerValidatorTimer = setTimeout(function(){
                   $self.removeClass('success');
                   $progressBar.removeClass('bg-success');
+                  $(document.body).removeClass('success');
                 }, 2000);
                 incScore(+2);
               } else {                              // Fail
