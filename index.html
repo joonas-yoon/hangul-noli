@@ -41,13 +41,13 @@
 
         
         <div class="progress bg-dark" style="height: 1px;">
-          <div id="progressbar-typing" class="progress-bar bg-light" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+          <div id="progressbar-cpm" class="progress-bar bg-light" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
         </div>
         <div class="w-100 mx-auto answer-box" id="answer-box" contenteditable="true" data-text="원래 문장은 무엇이었을까요? 여기에 적어주세요."></div>
         <!-- Typing speed -->
         <div class="row info-box">
-          <div class="col info-left" style="color: #aaa;">
-            <i>0.0 wps</i>
+          <div class="col info-left" style="color: #aaa; font-style: italic;">
+            <span id="key-speed">-</span> wps
           </div>
         </div>
       </div>
@@ -66,8 +66,52 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="dist/js/hangul.js/hangul.js"></script>
     <script type="text/javascript">
+      class KeyboardSpeed {
+        constructor() {
+          this.prevKeyTime = 0;
+          this.counter = 0;
+          this.avgCps = 0;
+        }
+
+        clear() {
+          this.prevKeyTime = 0;
+          this.counter = 0;
+          this.avgCps = 0;  // average char per seconds
+        }
+
+        update(){
+          let curTime = new Date().getTime();
+          let dt = curTime - this.prevKeyTime;
+          if (dt < 10) return; // too fast
+          let cpms = 1000 / dt; // chars per milliseconds
+          if (this.avgCps === 0) {
+            this.avgCps = cpms;
+          } else {
+            this.avgCps = (this.avgCps * (this.counter - 1) + cpms) / this.counter;
+          }
+          this.prevKeyTime = curTime;
+          this.counter += 1;
+        }
+
+        // Chars per minutes
+        get cpm() {
+          return this.avgCps * 60;
+        }
+
+        static isValidKey(code) {
+          return (48 <= code && code <= 57)      // digit number
+            || (65 <= code && code <= 90)        // alphabet(capital)
+            || (97 <= code && code <= 122)       // alphabet
+            || (12593 <= code && code <= 12643)  // korean
+            || (45032 <= code && code <= 55203)  // korean(complex)
+            ;
+        }
+      };
       (function(){
         $.getJSON("data/problems.json", startGame);
+
+        let KeySpeed = new KeyboardSpeed();
+        let $keySpeed = $("#key-speed");
 
         function startGame(json){
           const PROBLEMS = json['problems'];
@@ -79,6 +123,7 @@
           let $curStep = $("#cur-step");
           let $totalStep = $("#total-step");
           let $progressBar = $("#progressbar");
+          let $progressBarCPM = $("#progressbar-cpm");
           let currentStep = 0, totalStep = 10, currentLevel = 1;
           let placeholderHtml = '<i>' + $answerBox.data('text') + '</i>';
           let answer = '';
@@ -102,6 +147,10 @@
             return false;
           });
           $answerBox.keyup(function(e){
+            if (KeyboardSpeed.isValidKey(e.keyCode)) {
+              KeySpeed.update();
+              $keySpeed.text(Math.ceil(KeySpeed.cpm * 10) / 10);
+            }
             if (e.keyCode == 13) { // Enter key
               this.innerText = this.innerText.replace(/(\r\n|\n|\r)/gm, '');
               var $self = $(this);
@@ -139,10 +188,14 @@
                 incScore(-1);
               }
             }
+            $progressBarCPM.css('width', (KeySpeed.cpm / 10) + '%');
           });
 
           setInterval(function(){
+            $answerBox.removeClass('success');
             $answerBox.removeClass('error');
+            $progressBar.removeClass('bg-success');
+            $progressBar.removeClass('bg-danger');
           }, 5000);
 
           function randomText() {
@@ -161,6 +214,7 @@
               return s;
             }).join('');
             $quizBox.text(text);
+            KeySpeed.clear();
             return answer;
           }
 

@@ -77,5 +77,5 @@ h1.heading {
     background-color: rgba(159, 232, 149, 0.4) !important;
 }
 #progressbar-typing {
-    transition: width .15s !important;
+    transition: width .01s !important;
 }
