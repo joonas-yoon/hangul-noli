@@ -16,8 +16,8 @@ a:hover, a:focus {
     text-decoration: none;
 }
 h1.heading {
-    margin-top: -3em;
-    margin-bottom: 2em;
+    margin-top: -2em;
+    margin-bottom: 1em;
 }
 .main-container {
     max-width: 1024px;
